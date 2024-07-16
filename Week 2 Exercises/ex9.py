@@ -15,6 +15,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 filename = path + '/airplane.bmp'
 background = plt.imread(filename)
 
+
 second_hand_length = 200
 second_hand_width = 2
 minute_hand_length = 150
@@ -30,6 +31,7 @@ def clock_hand_vector(angle, length):
 fig, ax = plt.subplots()
 
 while True:
+    plt.gca().set_axis_off()
     plt.imshow(background)
 
     # First retrieve the time
@@ -42,7 +44,7 @@ while True:
 
 
     # Calculate end points of hour, minute, second
-
+    
     hour_vector = clock_hand_vector(hour/12*2*np.pi, hour_hand_length)
     minute_vector = clock_hand_vector(minute/60*2*np.pi, minute_hand_length)
     second_vector = clock_hand_vector(second/60*2*np.pi, second_hand_length)

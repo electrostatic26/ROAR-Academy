@@ -32,7 +32,7 @@ cursor = Cursor(ax2,
 def onclick(event):
 	[x1, y1] = [event.xdata, event.ydata]
 	print(x1, y1)
-	plt.plot(x1,y1, 'ro')
+	plt.plot(x1,y1, 'rD')
 	fig2.canvas.draw_idle()
     
 fig2.canvas.mpl_connect('button_press_event', onclick)
