@@ -9,6 +9,8 @@ from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
 from stable_baselines3 import A2C
 
+
+
 # There already exists an environment generator that will make and wrap atari environments correctly.
 # We use 8 parallel processes
 env = make_atari_env('Breakout-v4', n_envs=8, seed=0)
