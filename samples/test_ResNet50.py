@@ -9,6 +9,7 @@ from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, d
 import numpy as np
 import cv2
 
+
 model = ResNet50(weights='imagenet')
 print(model.summary())
 

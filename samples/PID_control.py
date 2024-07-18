@@ -115,7 +115,7 @@ class Vehicle2D(object):
 
 vehicle = Vehicle2D()
 vehicle.set(0, 1, 0)
-vehicle.set_steering_drift(10/180.*np.pi)
+vehicle.set_steering_drift(10/180*np.pi)
 
 track_length = 1000
 targets = []; track_x = []; track_y = []
@@ -137,3 +137,4 @@ ax1.plot(x_trajectory, y_trajectory, 'g', linewidth=4, label= controller_legend)
 ax1.plot(track_x, track_y, 'r', label='target')
 plt.legend()
 plt.show()
+

@@ -1,24 +1,23 @@
 ## This is course material for Introduction to Modern Artificial Intelligence
-## Example code: perceptron.py
-## Author: Allen Y. Yang,  Intelligent Racing Inc.
+## Example code: mlp.py
+## Author: Allen Y. Yang
 ##
 ## (c) Copyright 2020. Intelligent Racing Inc. Not permitted for commercial use
 
-# Please make sure to conda install -c conda-forge keras
-import keras
+# Load dependencies
 from keras.models import Sequential
 from keras.layers import Dense
-import numpy as np      
+import numpy as np
 import matplotlib.pyplot as plt
-from keras.activations import sigmoid
 
+# Create data
 linearSeparableFlag = False
-
-#if it is linearly non seperable does that mean the machine learning cant discern between two different cats?
-
-x_bias = 0
+x_bias = 6
 
 def toy_2D_samples(x_bias ,linearSeparableFlag):
+    label1 = np.array([1,0])
+    label2 = np.array([0,1])
+
     if linearSeparableFlag:
         samples1 = np.random.multivariate_normal([5+x_bias, 0], [[1, 0],[0, 1]], 100)
         samples2 = np.random.multivariate_normal([-5+x_bias, 0], [[1, 0],[0, 1]], 100)
@@ -45,44 +44,46 @@ def toy_2D_samples(x_bias ,linearSeparableFlag):
         plt.plot(samples4[:, 0], samples4[:, 1], 'rx')
         plt.show()
 
-
-    labels1 = np.zeros(100)
-    labels2 = np.ones(100)
+    label1 = np.array([[1, 0]])
+    label2 = np.array([[0, 1]])
+    labels1 = np.repeat(label1, 100, axis = 0)
+    labels2 = np.repeat(label2, 100, axis = 0)
     labels = np.concatenate((labels1, labels2 ), axis =0)
     return samples, labels
 
 samples, labels = toy_2D_samples(x_bias ,linearSeparableFlag)
 
 # Split training and testing set
-
 randomOrder = np.random.permutation(200)
-trainingX = samples[randomOrder[0:100],:]
-trainingY = labels[randomOrder[0:100]]
-testingX = samples[randomOrder[100:200],:]
-testingY = labels[randomOrder[100:200]]
+trainingX = samples[randomOrder[0:100], :]
+trainingY = labels[randomOrder[0:100], :]
+testingX = samples[randomOrder[100:200], :]
+testingY = labels[randomOrder[100:200], :]
 
+# Build the MLP model
 model = Sequential()
-model.add(Dense(1, input_shape=(2,), activation='sigmoid', use_bias=False))
-model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['binary_accuracy'])
-model.fit(trainingX, trainingY, epochs=100, batch_size=10, verbose=1, validation_split=0.2)
-#epochs is the number of calculations per one step of gradient descent
-#gradient descent per 10 samples, making gradient less accurante but faster
+model.add(Dense(2, input_shape=(2,), activation='relu', use_bias=True))
+model.add(Dense(2, activation='softmax'))
 
+# Compile the model
+model.compile(loss='mean_squared_error', optimizer='adam', metrics=['binary_accuracy'])
 
+# Train the model
+model.fit(trainingX, trainingY, epochs=500, batch_size=10, verbose=1, validation_split=0.2)
 
-# score = model.evaluate(testingX, testingY, verbose=0)
+# Evaluate the model
 score = 0
 for i in range(100):
-    output = model.predict(np.array([testingX[i,:]]))
-    if output<0.5:
-        estimate = 0
+    predict_x = model.predict(np.array([testingX[i,:]]))
+    estimate = np.argmax(predict_x, axis=1)
+
+    if testingY[i,estimate] == 1:
+        score += 1
+
+    if estimate == 0:
         plt.plot(testingX[i, 0], testingX[i, 1], 'bo')
-    else: 
-        estimate = 1
+    else:
         plt.plot(testingX[i, 0], testingX[i, 1], 'rx')
 
-    if estimate == testingY[i]:
-        score = score  + 1
-
-plt.show()
 print('Test accuracy:', score/100)
+plt.show()
