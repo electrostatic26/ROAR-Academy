@@ -23,7 +23,7 @@ model = A2C('CnnPolicy', env, verbose=1, device='cpu')
 path = os.path.dirname(os.path.abspath(__file__))
 model_file_name = path + '/breakout_a2c'
 LOAD_PRETRAINED = False
-TRAIN_TIMESTEPS = int(1e5)
+TRAIN_TIMESTEPS = int(1e6)
 if LOAD_PRETRAINED:
     # Load saved model
     model = A2C.load(model_file_name)

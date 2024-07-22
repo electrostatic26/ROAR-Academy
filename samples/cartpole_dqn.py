@@ -70,6 +70,8 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
+#not installing anaconda until second to last day
+#cafe everyday
 
 if __name__ == "__main__":
     env = gym.make('CartPole-v1')
